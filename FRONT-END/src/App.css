@@ -1,0 +1,12 @@
+.sidebar ul li a:hover {
+  background-color: blue;
+}
+
+.content {
+  overflow-y: scroll;
+}
+
+.content {
+  overflow-y: auto;
+  height: calc(100vh - 56px);
+}
