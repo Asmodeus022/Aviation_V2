@@ -37,7 +37,7 @@ public class ToolEntity {
     private String barcodeId;
 
     @Column(nullable = false)
-    @NotBlank(message = "Please provide a name!")
+    @NotBlank(message = "Please provide a toolName!")
     private String toolName;
     
     @Enumerated(EnumType.STRING)

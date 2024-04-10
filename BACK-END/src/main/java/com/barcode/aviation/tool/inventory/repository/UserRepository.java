@@ -8,5 +8,5 @@ import com.barcode.aviation.tool.inventory.entities.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> getByUserId(Long userId);
+    Optional<User> findByUserId(Long userId);
 }

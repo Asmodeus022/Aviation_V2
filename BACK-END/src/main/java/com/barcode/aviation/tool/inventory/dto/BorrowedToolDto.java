@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class BorrowedToolDto {
+    private Long borrowedToolId;
     private Long toolId;
-    private String toolname;
+    private String toolName;
     private String toolBarcodeId;
     private ToolStatus status;
     private LocalDateTime borrowedDate;

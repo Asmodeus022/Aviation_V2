@@ -35,9 +35,10 @@ public class LendingTransactionMapper {
         List<BorrowedToolDto> borrowedToolDtos = lendingTransaction.getBorrowedTools().stream()
             .map(borrowedTool -> {
                 BorrowedToolDto borrowedToolDto = new BorrowedToolDto();
+                borrowedToolDto.setBorrowedToolId(borrowedTool.getBorrowedToolId());
                 borrowedToolDto.setToolId(borrowedTool.getToolId());
                 borrowedToolDto.setToolBarcodeId(borrowedTool.getToolBarcodeId());
-                borrowedToolDto.setToolname(borrowedTool.getToolname());
+                borrowedToolDto.setToolName(borrowedTool.getToolName());
                 borrowedToolDto.setBorrowedDate(borrowedTool.getBorrowedDate());
                 borrowedToolDto.setReturnedDate(borrowedTool.getReturnedDate());
                 borrowedToolDto.setStatus(borrowedTool.getStatus());
@@ -45,7 +46,7 @@ public class LendingTransactionMapper {
             })
             .collect(Collectors.toList());
     
-        Optional<User> userOptional = userRepository.getByUserId(lendingTransaction.getUser().getUserId());
+        Optional<User> userOptional = userRepository.findByUserId(lendingTransaction.getUser().getUserId());
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             UserDto userDto = new UserDto(user.getUserId(), user.getEmail(), user.getFullname(), user.getUserType());
@@ -78,9 +79,10 @@ public class LendingTransactionMapper {
             if (toolOptional.isPresent()) {
                 ToolEntity toolEntity = toolOptional.get();
                 BorrowedTool borrowedTool = new BorrowedTool();
+                borrowedTool.setBorrowedToolId(borrowedToolDto.getBorrowedToolId());
                 borrowedTool.setToolId(borrowedToolDto.getToolId());
                 borrowedTool.setToolBarcodeId(toolEntity.getBarcodeId());
-                borrowedTool.setToolname(toolEntity.getToolName());
+                borrowedTool.setToolName(toolEntity.getToolName());
                 borrowedTool.setBorrowedDate(LocalDateTime.parse(currentDate.format(formatter), formatter));
     
                 LocalDateTime returnedDate = currentDate.plusWeeks(1);

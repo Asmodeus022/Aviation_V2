@@ -2,11 +2,14 @@ package com.barcode.aviation.tool.inventory.service.serviceImpl;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import com.barcode.aviation.tool.inventory.dto.LendingTransactionDto;
 import com.barcode.aviation.tool.inventory.entities.LendingTransaction;
 import com.barcode.aviation.tool.inventory.mapper.LendingTransactionMapper;
+import com.barcode.aviation.tool.inventory.mapper.UserMapper;
 import com.barcode.aviation.tool.inventory.repository.LendingTransactionRepository;
 import com.barcode.aviation.tool.inventory.repository.ToolRepository;
 import com.barcode.aviation.tool.inventory.repository.UserRepository;
@@ -20,6 +23,7 @@ public class LendingTransactionServiceImpl implements LendingTransactionService 
     private final LendingTransactionRepository lendingTransactionRepository;
     private final ToolRepository toolRepository;
     private final UserRepository userRepository;
+    private final LendingTransactionMapper lendingTransactionMapper;
 
     @Override
     public LendingTransactionDto addTransaction(LendingTransactionDto lendingTransactionDto) throws IOException {
@@ -40,8 +44,12 @@ public class LendingTransactionServiceImpl implements LendingTransactionService 
 
     @Override
     public List<LendingTransactionDto> getAllTransaction() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllTransaction'");
+        List<LendingTransaction> lendingTransactions = lendingTransactionRepository.findAll();
+
+        System.out.println("Number of transactions retrieved: " + lendingTransactions.size());
+        return lendingTransactions.stream()
+                .map(lendingTransactionMapper::mapToLendingTransactionDto)
+                .collect(Collectors.toList());
     }
 
     @Override

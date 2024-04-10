@@ -30,7 +30,7 @@ public class BorrowedTool {
     private Long toolId;
 
     @Column(name = "tool_name")
-    private String toolname;
+    private String toolName;
 
     @Column(name = "tool_barcodeId")
     private String toolBarcodeId;
