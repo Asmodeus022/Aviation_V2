@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.barcode.aviation.tool.inventory.dto.LendingTransactionDto;
 import com.barcode.aviation.tool.inventory.entities.LendingTransaction;
 import com.barcode.aviation.tool.inventory.mapper.LendingTransactionMapper;
-import com.barcode.aviation.tool.inventory.mapper.UserMapper;
 import com.barcode.aviation.tool.inventory.repository.LendingTransactionRepository;
 import com.barcode.aviation.tool.inventory.repository.ToolRepository;
 import com.barcode.aviation.tool.inventory.repository.UserRepository;
