@@ -6,7 +6,7 @@ const Header = ({title}) => {
         <div>
             <header>
                 <nav className="navbar navbar-expand-lg bg-body-tertiary">
-                    <div className="container-md">
+                    <div className="container-fluid">
                         <a className="navbar-brand" href="#">{title}</a>
                     </div>
                 </nav>

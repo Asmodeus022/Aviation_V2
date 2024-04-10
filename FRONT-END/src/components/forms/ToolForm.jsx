@@ -11,9 +11,9 @@ const Tool_Form = ({ toolId, onClose }) => {
     useEffect(()=> {
         if (toolId) {
             toolById(toolId).then((response) => {
-                const { name, barcodeId, status } = response.data;
+                const { toolName, barcodeId, status } = response.data;
                 setToolBarcodeId(barcodeId);
-                setToolName(name);
+                setToolName(toolName);
                 setToolStatus(status);
             }).catch(error => {
                 console.error(error);

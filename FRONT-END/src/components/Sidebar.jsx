@@ -23,15 +23,15 @@ const Sidebar = () => {
                 </Link>
             </li>
             <li className='nav-item p-1'>
-                <Link to='items' className='nav-link text-white'>
+                <Link to='borrowed' className='nav-link text-white'>
                     <i className='bi bi-cart me-2 fs-5'></i>
-                    <span className='fs-5'>Items</span>
+                    <span className='fs-5'>Borrowed</span>
                 </Link>
             </li>
             <li className='nav-item p-1'>
-                <Link to='products' className='nav-link text-white'>
+                <Link to='tools' className='nav-link text-white'>
                     <i className='bi bi-view-list me-2 fs-5'></i>
-                    <span className='fs-5'>Products</span>
+                    <span className='fs-5'>Tools</span>
                 </Link>
             </li>
             <li className='nav-item p-1'>
