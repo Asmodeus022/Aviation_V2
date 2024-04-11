@@ -35,6 +35,12 @@ const Sidebar = () => {
                 </Link>
             </li>
             <li className='nav-item p-1'>
+                <Link to='users' className='nav-link text-white'>
+                    <i className='bi bi-view-list me-2 fs-5'></i>
+                    <span className='fs-5'>Users</span>
+                </Link>
+            </li>
+            <li className='nav-item p-1'>
                 <Link to='report' className='nav-link text-white'>
                     <i className='bi bi-grid me-2 fs-5'></i>
                     <span className='fs-5'>Report</span>

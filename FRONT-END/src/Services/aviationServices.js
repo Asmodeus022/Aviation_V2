@@ -65,3 +65,7 @@ export const updateTool = async(toolId, toolData) => {
 export const deleteTool = async(id) => axios.delete(REST_API_BASE_URL + "/tools/" + id)
 
 export const allBarrowed = () => axios.get(REST_API_BASE_URL + '/transaction/all')
+
+
+
+export const addUser = (userData) => axios.post(REST_API_BASE_URL + '/users', userData)

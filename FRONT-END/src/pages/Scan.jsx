@@ -7,7 +7,7 @@ const Scan = () => {
 
     const [scannedData, setScannedData] = useState('');
     const [barcodeId, setBarcodeId] = useState('');
-  const [barcodeImage, setBarcodeImage] = useState(null);
+    const [barcodeImage, setBarcodeImage] = useState(null);
 
     useEffect(() => {
         document.addEventListener('keydown', handleKeyDown);
@@ -85,20 +85,20 @@ const Scan = () => {
             <p>Scanned Barcode: {scannedData}</p>
 
             <div>
-            <input
-                type="text"
-                placeholder="Enter Barcode ID"
-                value={barcodeId}
-                onChange={(e) => setBarcodeId(e.target.value)}
-            />
-            <button onClick={generateBarcode}>Generate Barcode</button>
-            {barcodeImage && (
-                <div>
-                    <img src={barcodeImage} alt="Barcode" />
-                    <button onClick={saveBarcodeImage}>Save Barcode</button>
-                </div>
-            )}
-        </div>
+                <input
+                    type="text"
+                    placeholder="Enter Barcode ID"
+                    value={barcodeId}
+                    onChange={(e) => setBarcodeId(e.target.value)}
+                />
+                <button onClick={generateBarcode}>Generate Barcode</button>
+                {barcodeImage && (
+                    <div>
+                        <img src={barcodeImage} alt="Barcode" />
+                        <button onClick={saveBarcodeImage}>Save Barcode</button>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }
