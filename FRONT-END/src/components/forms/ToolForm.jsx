@@ -1,14 +1,16 @@
 import React, { useState, useEffect,  } from 'react'
-import { toolById } from '../../Services/aviationServices'
+import { toolById, updateTool, addTool, deleteTool } from '../../Services/aviationServices'
 
 
 const Tool_Form = ({ toolId, onClose }) => {
     const [toolImage, setToolImage] = useState(null);
     const [toolBarcodeId, setToolBarcodeId] = useState('')
     const [toolName, setToolName] = useState('')
-    const [toolStatus, setToolStatus] = useState('')
+    const [toolStatus, setToolStatus] = useState('AVAILABLE')
+    const [error, setError] = useState(null);
 
     useEffect(()=> {
+        setError(null);
         if (toolId) {
             toolById(toolId).then((response) => {
                 const { toolName, barcodeId, status } = response.data;
@@ -17,7 +19,11 @@ const Tool_Form = ({ toolId, onClose }) => {
                 setToolStatus(status);
             }).catch(error => {
                 console.error(error);
+                setError("Failed to fetch tool data. Please try again.");
             })
+        } else {
+            
+            setToolStatus('AVAILABLE')
         }
     }, [toolId])
 
@@ -29,7 +35,8 @@ const Tool_Form = ({ toolId, onClose }) => {
         }
     }
 
-    function saveTool() {
+    function saveTool(event) {
+        event.preventDefault();
         const toolData = {
             image: toolImage ? toolImage: null,
             name: toolName,
@@ -37,14 +44,18 @@ const Tool_Form = ({ toolId, onClose }) => {
             status: toolStatus
         }
 
+        console.log(toolId)
+        console.log(toolData)
+
         if (toolId) {
-            updateTool(toolData, toolId)
+            updateTool(toolId, toolData)
                 .then(response => {
                     console.log("Tool updated successfully:", response.data);
                     onClose();
                 })
                 .catch(error => {
                     console.error("Error updating tool:", error);
+                    setError("Failed to update the tool. Please try again.");
                 });
         } else {
             addTool(toolData)
@@ -54,9 +65,29 @@ const Tool_Form = ({ toolId, onClose }) => {
                 })
                 .catch(error => {
                     console.error("Error adding tool:", error);
+                    setError("Failed to add the tool. Please try again.");
                 });
         }
     }
+
+    function handleDeleteTool() {
+        const isConfirmed = window.confirm("Are you sure you want to delete this product?");
+        if (isConfirmed) {
+            deleteTool(toolId)
+                .then(() => {
+                    onClose();
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 404) {
+                        onClose();
+                    } else {
+                        console.error("Error deleting tool:", error);
+                        setError("Failed to delete the tool. Please try again.");
+                    }
+                });
+        }
+    }
+    
 
     function handleCloseFunction() {
         setToolImage(null);
@@ -75,6 +106,7 @@ const Tool_Form = ({ toolId, onClose }) => {
                         <button type="button" className="btn-close" onClick={() => handleCloseFunction()} data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div className="modal-body">
+                        {error && <div className="alert alert-danger" role="alert">{error}</div>}
                         <form action="">
                             <div className='form-group mb-2'>
                                 <label className='form-label' htmlFor="">Add Image:</label>
@@ -117,14 +149,20 @@ const Tool_Form = ({ toolId, onClose }) => {
                                         onChange={(e) => setToolStatus(e.target.value)}
                                     >
                                         <option value="AVAILABLE">AVAILABLE</option>
+                                        <option value="BORROWED">BORROWED</option>
                                         <option value="OUT OF STOCK">OUT OF STOCK</option>
+                                        <option value="MAINTENANCE">MAINTENANCE</option>
+                                        <option value="OTHER">OTHER</option>
                                     </select>
                                 </div>
                         </form>
                     </div>
-                    <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button className='btn btn-success' onClick={saveTool} data-bs-toggle="modal">Submit</button>
+                    <div className="modal-footer d-flex justify-content-between">
+                        <button className='btn btn-danger' onClick={() => handleDeleteTool()} data-bs-dismiss="modal" >delete</button>
+                        <div>
+                            <button className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => handleCloseFunction()}>Close</button>
+                            <button className='btn btn-success ms-2' onClick={(e) => saveTool(e)}>Submit</button>
+                        </div>
                     </div>
                 </div>
             </div>
