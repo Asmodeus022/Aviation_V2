@@ -43,6 +43,9 @@ public class LendingTransaction {
     @Column(name = "status")
     private TransactionStatus status;
 
+    @Column(name = "due_date")
+    private LocalDateTime dueDate;
+
     @CreationTimestamp
     @Column(name = "borrowed_date")
     private LocalDateTime borrowedDate;

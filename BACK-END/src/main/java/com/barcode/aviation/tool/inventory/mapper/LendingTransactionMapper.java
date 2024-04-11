@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.time.LocalDateTime;
-
+import java.time.temporal.ChronoUnit;
 import com.barcode.aviation.tool.inventory.dto.BorrowedToolDto;
 import com.barcode.aviation.tool.inventory.dto.LendingTransactionDto;
 import com.barcode.aviation.tool.inventory.dto.UserDto;
@@ -39,12 +39,14 @@ public class LendingTransactionMapper {
                 borrowedToolDto.setToolId(borrowedTool.getToolId());
                 borrowedToolDto.setToolBarcodeId(borrowedTool.getToolBarcodeId());
                 borrowedToolDto.setToolName(borrowedTool.getToolName());
-                borrowedToolDto.setBorrowedDate(borrowedTool.getBorrowedDate());
-                borrowedToolDto.setReturnedDate(borrowedTool.getReturnedDate());
                 borrowedToolDto.setStatus(borrowedTool.getStatus());
                 return borrowedToolDto;
             })
             .collect(Collectors.toList());
+
+        LocalDateTime currentDate = LocalDateTime.now();
+        long daysUntilDue = ChronoUnit.DAYS.between(currentDate, lendingTransaction.getDueDate());
+        String dueDate = String.valueOf(daysUntilDue);
     
         Optional<User> userOptional = userRepository.findByUserId(lendingTransaction.getUser().getUserId());
         if (userOptional.isPresent()) {
@@ -56,6 +58,7 @@ public class LendingTransactionMapper {
                 userDto,
                 borrowedToolDtos,
                 lendingTransaction.getStatus(),
+                dueDate,
                 lendingTransaction.getBorrowedDate()
             );
         } else {
@@ -83,23 +86,22 @@ public class LendingTransactionMapper {
                 borrowedTool.setToolId(borrowedToolDto.getToolId());
                 borrowedTool.setToolBarcodeId(toolEntity.getBarcodeId());
                 borrowedTool.setToolName(toolEntity.getToolName());
-                borrowedTool.setBorrowedDate(LocalDateTime.parse(currentDate.format(formatter), formatter));
-    
-                LocalDateTime returnedDate = currentDate.plusWeeks(1);
-                borrowedTool.setReturnedDate(returnedDate);
-    
                 borrowedTool.setStatus(borrowedToolDto.getStatus());
                 borrowedTools.add(borrowedTool);
             } else {
                 throw new ToolNotFoundException("Tool not found with Id: " + borrowedToolDto.getToolId());
             }
         }
+
+        int daysUntilDue = lendingTransactionDto.getDueDate() != null ? Integer.parseInt(lendingTransactionDto.getDueDate()) : 0;
+        LocalDateTime dueDate = LocalDateTime.now().plusDays(daysUntilDue);
     
         return new LendingTransaction(
             null,
             user,
             borrowedTools,
             lendingTransactionDto.getStatus(),
+            dueDate,
             LocalDateTime.parse(currentDate.format(formatter), formatter)
         );
     }

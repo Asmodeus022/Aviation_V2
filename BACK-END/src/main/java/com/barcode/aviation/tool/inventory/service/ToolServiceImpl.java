@@ -105,4 +105,13 @@ public class ToolServiceImpl implements ToolService {
          toolRepository.delete(tl);
          return "Tool Deleted with id = " + id;
      }
+
+    @Override
+    public ToolDto getToolByBarcodeId(String barcodeId) {
+        ToolEntity tool = toolRepository.findByBarcodeId(barcodeId).orElseThrow(()-> new ToolNotFoundException("Tool not found with id = " + barcodeId));
+        String pictureUrl = baseUrl + "/toolpictures/" + tool.getPicture();
+
+        ToolDto toolDto = ToolMapper.mapToToolDto(tool, pictureUrl);
+        return toolDto;
+    }
 }

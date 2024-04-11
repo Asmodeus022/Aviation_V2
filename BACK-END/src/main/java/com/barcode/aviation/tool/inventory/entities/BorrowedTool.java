@@ -38,11 +38,4 @@ public class BorrowedTool {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private ToolStatus status;
-
-    @Column(name = "borrowed_date")
-    private LocalDateTime borrowedDate;
-
-    @Column(name = "returned_date")
-    private LocalDateTime returnedDate;
-
 }

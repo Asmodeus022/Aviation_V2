@@ -50,6 +50,12 @@ public class ToolController {
         return ResponseEntity.ok(toolDto);
     }
 
+    @GetMapping("/barcode/{id}")
+    public ResponseEntity<ToolDto> getToolByBarcodeId(@PathVariable("id") String toolId){
+        ToolDto toolDto= toolService.getToolByBarcodeId(toolId);
+        return ResponseEntity.ok(toolDto);
+    }
+
     //Build Gett All User REST API
     @GetMapping
     public ResponseEntity<List<ToolDto>> getAllTools(){

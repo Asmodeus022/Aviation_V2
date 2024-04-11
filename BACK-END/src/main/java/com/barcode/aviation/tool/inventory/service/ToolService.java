@@ -12,6 +12,8 @@ public interface ToolService {
 
     ToolDto getToolById(Long toolId);
 
+    ToolDto getToolByBarcodeId(String barcodeId);
+
     List<ToolDto> getAllTools();
 
     ToolDto updateTool(Long toolId, ToolDto updatedtool, MultipartFile file) throws IOException;

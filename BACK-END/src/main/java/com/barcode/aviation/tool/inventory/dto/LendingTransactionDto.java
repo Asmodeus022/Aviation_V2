@@ -17,5 +17,6 @@ public class LendingTransactionDto {
     private UserDto user;
     private List<BorrowedToolDto> borrowedTools;
     private TransactionStatus status;
+    private String dueDate;
     private LocalDateTime borrowedDate;
 }
