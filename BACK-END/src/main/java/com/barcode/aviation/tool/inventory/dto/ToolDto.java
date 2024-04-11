@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ToolDto {
-    private Long id;
+    private Long toolId;
     private String picture;
     private String barcodeId;
     private String toolName;

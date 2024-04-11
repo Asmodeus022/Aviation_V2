@@ -19,7 +19,18 @@ public class ToolMapper {
 
     public static ToolEntity mapToToolEntity(ToolDto toolDto) {
         return new ToolEntity(
-            toolDto.getId(),
+            toolDto.getToolId(),
+            toolDto.getPicture(),
+            toolDto.getBarcodeId(),
+            toolDto.getToolName(),
+            toolDto.getStatus(),
+            toolDto.getDateTime()
+        );
+    }
+
+    public static ToolEntity mapToToolEntityWithId(ToolDto toolDto, Long toolId) {
+        return new ToolEntity(
+            toolId,
             toolDto.getPicture(),
             toolDto.getBarcodeId(),
             toolDto.getToolName(),

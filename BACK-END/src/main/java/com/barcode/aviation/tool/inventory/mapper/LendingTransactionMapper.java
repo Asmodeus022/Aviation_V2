@@ -14,6 +14,7 @@ import com.barcode.aviation.tool.inventory.dto.UserDto;
 import com.barcode.aviation.tool.inventory.entities.BorrowedTool;
 import com.barcode.aviation.tool.inventory.entities.LendingTransaction;
 import com.barcode.aviation.tool.inventory.entities.ToolEntity;
+import com.barcode.aviation.tool.inventory.entities.TransactionStatus;
 import com.barcode.aviation.tool.inventory.entities.User;
 import com.barcode.aviation.tool.inventory.exception.ToolNotFoundException;
 import com.barcode.aviation.tool.inventory.exception.UserNotFoundException;
@@ -100,7 +101,7 @@ public class LendingTransactionMapper {
             null,
             user,
             borrowedTools,
-            lendingTransactionDto.getStatus(),
+            TransactionStatus.ON_GOING,
             dueDate,
             LocalDateTime.parse(currentDate.format(formatter), formatter)
         );

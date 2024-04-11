@@ -2,6 +2,7 @@ import axios from "axios";
 
 const REST_API_BASE_URL = 'http://localhost:8080/api'
 
+// Fetch
 export const listTools = (id) => axios.get(REST_API_BASE_URL + '/tools/barcode/' + id)
 
 export const toolById = (toolId) => axios.get(REST_API_BASE_URL + '/tools/' + toolId)
@@ -66,6 +67,13 @@ export const deleteTool = async(id) => axios.delete(REST_API_BASE_URL + "/tools/
 
 export const allBarrowed = () => axios.get(REST_API_BASE_URL + '/transaction/all')
 
+<<<<<<< HEAD
+export const getAllUsers = () => axios.get(REST_API_BASE_URL + "/users/all")
+
+// Post
+export const addTransaction = (data) => axios.post(REST_API_BASE_URL + "/transaction/add-transaction", data)
+=======
 
 
 export const addUser = (userData) => axios.post(REST_API_BASE_URL + '/users', userData)
+>>>>>>> bd9d0d397b118daf4a469d6b767e8524cbc9b594
