@@ -38,4 +38,15 @@ public class ToolMapper {
             toolDto.getDateTime()
         );
     }
+
+    public static ToolEntity mapToToolEntityWithId(ToolDto toolDto, Long toolId) {
+        return new ToolEntity(
+            toolId,
+            toolDto.getPicture(),
+            toolDto.getBarcodeId(),
+            toolDto.getToolName(),
+            toolDto.getStatus(),
+            toolDto.getDateTime()
+        );
+    }
 }
