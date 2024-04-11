@@ -10,6 +10,7 @@ import com.barcode.aviation.tool.inventory.entities.BorrowedTool;
 import com.barcode.aviation.tool.inventory.entities.LendingTransaction;
 import com.barcode.aviation.tool.inventory.entities.ToolEntity;
 import com.barcode.aviation.tool.inventory.mapper.LendingTransactionMapper;
+import com.barcode.aviation.tool.inventory.repository.BorrowedToolRepository;
 import com.barcode.aviation.tool.inventory.repository.LendingTransactionRepository;
 import com.barcode.aviation.tool.inventory.repository.ToolRepository;
 import com.barcode.aviation.tool.inventory.repository.UserRepository;
@@ -23,6 +24,7 @@ public class LendingTransactionServiceImpl implements LendingTransactionService 
     private final LendingTransactionRepository lendingTransactionRepository;
     private final ToolRepository toolRepository;
     private final UserRepository userRepository;
+    private final BorrowedToolRepository borrowedToolRepository;
     private final LendingTransactionMapper lendingTransactionMapper;
 
     @Override
@@ -64,16 +66,17 @@ public class LendingTransactionServiceImpl implements LendingTransactionService 
 
             List<BorrowedTool> borrowedTools = lendingTransactionDto.getBorrowedTools().stream()
                     .map(borrowedToolDto -> {
-                        BorrowedTool borrowedTool = new BorrowedTool();
-                        borrowedTool.setToolId(borrowedToolDto.getToolId());
-                        borrowedTool.setStatus(borrowedToolDto.getStatus());
+                        Optional<BorrowedTool> borrowedTool = borrowedToolRepository.findById(borrowedToolDto.getBorrowedToolId());
+                        BorrowedTool entity = borrowedTool.get();
+                        entity.setToolId(borrowedToolDto.getToolId());
+                        entity.setStatus(borrowedToolDto.getStatus());
 
                         Optional<ToolEntity> toolEntity = toolRepository.findById(borrowedToolDto.getToolId());
                         if (toolEntity.isPresent()) {
-                            borrowedTool.setToolName(toolEntity.get().getToolName());
-                            borrowedTool.setToolBarcodeId(toolEntity.get().getBarcodeId());
+                            entity.setToolName(toolEntity.get().getToolName());
+                            entity.setToolBarcodeId(toolEntity.get().getBarcodeId());
                         }
-                        return borrowedTool;
+                        return entity;
                     })
                     .collect(Collectors.toList());
 

@@ -6,6 +6,7 @@ import Scan from './pages/Scan'
 import Tools from './pages/Tools'
 import Borrowed from './pages/Borrowed'
 import Report from './pages/Report'
+import Users from './pages/Users'
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
             <Route path='/scan' element={<Scan />}></Route>
             <Route path='/borrowed' element={<Borrowed /> }></Route>
             <Route path='/tools' element={<Tools /> }></Route>
+            <Route path='/users' element={<Users /> }></Route>
             <Route path='/report' element={<Report /> }></Route>
           </Routes>
         </div>
