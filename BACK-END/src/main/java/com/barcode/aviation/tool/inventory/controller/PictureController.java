@@ -3,6 +3,7 @@ package com.barcode.aviation.tool.inventory.controller;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import com.barcode.aviation.tool.inventory.service.PictureService;
 
 import jakarta.servlet.http.HttpServletResponse;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/toolpictures/")
 public class PictureController {
@@ -41,16 +43,18 @@ public class PictureController {
     @GetMapping("/{fileName}")
     public void serveFileHandler(@PathVariable String fileName, HttpServletResponse response) throws IOException {
         
-        InputStream resourceFile = pictureService.getResourceFile(path, fileName);
-        String contentType;
-        if(fileName.endsWith(".png")){
-            contentType = MediaType.IMAGE_PNG_VALUE;
-        }else if(fileName.endsWith(".jpeg")|| fileName.endsWith(".jpg")){
-            contentType = MediaType.IMAGE_JPEG_VALUE;
-        }else{
-            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+        try (InputStream resourceFile = pictureService.getResourceFile(path, fileName)) {
+            String contentType;
+            if(fileName.endsWith(".png")){
+                contentType = MediaType.IMAGE_PNG_VALUE;
+            }else if(fileName.endsWith(".jpeg")|| fileName.endsWith(".jpg")){
+                contentType = MediaType.IMAGE_JPEG_VALUE;
+            }else{
+                contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+            }
+            response.setContentType(contentType);
+            StreamUtils.copy(resourceFile, response.getOutputStream());
         }
-        response.setContentType(contentType);
-        StreamUtils.copy(resourceFile, response.getOutputStream());
+        
     }
 }

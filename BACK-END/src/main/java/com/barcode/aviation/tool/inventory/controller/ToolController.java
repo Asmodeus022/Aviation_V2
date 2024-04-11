@@ -29,58 +29,59 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping("/api/tools")
 public class ToolController {
-    private ToolService toolService;
+    private final ToolService toolService;
 
-    //Build Add User Rest API
+    // Build Add Tool Rest API
     @PostMapping
     public ResponseEntity<ToolDto> addTool(@RequestPart MultipartFile file,
-                                           @RequestPart String toolDto) throws IOException {{
-        if(file.isEmpty()){
+                                           @RequestPart String toolDto) throws IOException {
+        if (file.isEmpty()) {
             throw new FileExistsException("File is empty! Please send another file!");
         }
         ToolDto dto = convertToToolDto(toolDto);
         return new ResponseEntity<>(toolService.addTool(dto, file), HttpStatus.CREATED);
-        }
     }
 
-    //Build Get User REST API
-    @GetMapping("{id}")
-    public ResponseEntity<ToolDto> getUserById(@PathVariable("id") Long toolId){
-        ToolDto toolDto= toolService.getToolById(toolId);
+    // Build Get Tool by ID REST API
+    @GetMapping("/{id}")
+    public ResponseEntity<ToolDto> getToolById(@PathVariable("id") Long toolId) {
+        ToolDto toolDto = toolService.getToolById(toolId);
         return ResponseEntity.ok(toolDto);
     }
 
+    // Build Get Tool by Barcode ID REST API
     @GetMapping("/barcode/{id}")
-    public ResponseEntity<ToolDto> getToolByBarcodeId(@PathVariable("id") String toolId){
-        ToolDto toolDto= toolService.getToolByBarcodeId(toolId);
+    public ResponseEntity<ToolDto> getToolByBarcodeId(@PathVariable("id") String toolBarcodeId) {
+        ToolDto toolDto = toolService.getToolByBarcodeId(toolBarcodeId);
         return ResponseEntity.ok(toolDto);
     }
 
-    //Build Gett All User REST API
+    // Build Get All Tools REST API
     @GetMapping
-    public ResponseEntity<List<ToolDto>> getAllTools(){
+    public ResponseEntity<List<ToolDto>> getAllTools() {
         List<ToolDto> tools = toolService.getAllTools();
         return ResponseEntity.ok(tools);
     }
 
-    //Build Update User REST API
-    @PutMapping("{id}")
+    // Build Update Tool REST API
+    @PutMapping("/{toolId}")
     public ResponseEntity<ToolDto> updateToolHandler(@PathVariable Long toolId,
                                                      @RequestPart MultipartFile file,
-                                                     @RequestPart String toolDtoObj
-                                                    ) throws IOException{
-        if(file.isEmpty()) file = null;
+                                                     @RequestPart String toolDtoObj) throws IOException {
+        if (file.isEmpty()) {
+            file = null;
+        }
         ToolDto toolDto = convertToToolDto(toolDtoObj);
-    return ResponseEntity.ok(toolService.updateTool(toolId, toolDto, file));
+        return ResponseEntity.ok(toolService.updateTool(toolId, toolDto, file));
     }
     
-    //Build Delete User REST API
-    @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteMovieHandler(@PathVariable Long toolId) throws IOException{
-        return ResponseEntity.ok(toolService.deleteTool(toolId));
+    // Build Delete Tool REST API
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteToolHandler(@PathVariable Long id) throws IOException {
+        return ResponseEntity.ok(toolService.deleteTool(id));
     }
 
-    private ToolDto convertToToolDto(String toolDtoObj) throws JsonProcessingException{
+    private ToolDto convertToToolDto(String toolDtoObj) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(toolDtoObj, ToolDto.class);
     }
