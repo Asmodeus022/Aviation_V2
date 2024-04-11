@@ -32,6 +32,7 @@ const TransactionForm = () => {
             setUsers(response.data);
             console.log(response.data)
         } catch(error) {
+            console.error(error);
         }
     }
 
@@ -79,13 +80,16 @@ const TransactionForm = () => {
     }
 
     const handleClickAddTool = () => {
+        let includedIds = [];
         if (data !== undefined) {
+            console.log(data);
             if (addedTools.length > 0) {
-                let includedIds = [];
+                console.log(addedTools);
                 addedTools.forEach((addedTool) => {
-                    includedIds.push(addedTool.id);
+                    includedIds.push(addedTool.toolId);
                 })
-                if (includedIds.includes(data.id)) {
+                if (includedIds.includes(data.toolId)) {
+                    console.log(includedIds)
                     setErrorMessage("Already added");
                 }
                 else {
@@ -101,13 +105,21 @@ const TransactionForm = () => {
         }
     }
 
-    const handleClickRemoveTool = () => {
-        setAddedTools(addedTools.slice(0, -1));
+    const handleClickRemoveTool = (event, toolId) => {
+        event.preventDefault();
+
+        let newList = [];
+        addedTools.forEach(addedTool => {
+            if (addedTool.toolId !== toolId) {
+                newList.push(addedTool);
+            }
+        })
+        setAddedTools(newList);
+
     }
 
     const onSubmitTransactionForm = async (event) => {
         event.preventDefault();
-
 
         let formData = new FormData(event.target);
         let data = {};
@@ -169,7 +181,7 @@ const TransactionForm = () => {
                                     setBarcodeInput(e.target.value);
                                 }}
                                 onBlur={handleBlur} 
-                                value={barcodeInput}/>
+                                value={barcodeInput} />
                             </div>
                             <div className="row">
                                 <div className="col">
@@ -210,7 +222,7 @@ const TransactionForm = () => {
                                                     </p>
                                                     <button 
                                                     className='btn btn-danger'
-                                                    onClick={handleClickRemoveTool} 
+                                                    onClick={(event) => handleClickRemoveTool(event, tool.toolId)} 
                                                     >
                                                         Remove 
                                                     </button>
