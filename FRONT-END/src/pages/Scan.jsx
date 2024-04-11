@@ -19,7 +19,6 @@ const Scan = () => {
                 event.preventDefault();
                 
                 const scannedData = event.target.value;
-                console.log(scannedData)
                 handleScan(scannedData);
                 
                 event.target.value = '';
@@ -32,7 +31,6 @@ const Scan = () => {
         try {
             const response = await listTools(scannedData);
             setScannedData(response.data.barcodeId)
-            console.log('Response from backend:', response.data);
         } catch (error) {
             console.error('Error:', error);
         }

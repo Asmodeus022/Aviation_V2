@@ -15,7 +15,6 @@ const Tools = () => {
         try {
             const response = await allTools()
             setTools(response.data)
-            console.log(response.data)
         } catch (error) {
             console.error(error)
             setError('Failed to fetch products. Please try again.')

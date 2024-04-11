@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import { allBarrowed } from '../Services/aviationServices'
+import TransactionForm from '../components/forms/TransactionForm'
+import ResponseDialog from '../components/modals/ResponseDialog'
 
 
 const Borrowed_Tools = () => {
@@ -52,7 +54,7 @@ const Borrowed_Tools = () => {
             <Header title="Borrowed_Tools" />
             <div className="content">
                 <div className='d-flex justify-content-end mx-3 mb-3'>
-                    <button className='btn btn-primary' onClick={() => handleAddBorrowed()} data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add Borrowed</button>
+                    <button className='btn btn-primary' onClick={() => handleAddBorrowed()} data-bs-toggle="modal" data-bs-target="#transaction-modal">Add Borrowed</button>
                 </div>
 
                 <div className='mx-3'>
@@ -88,6 +90,7 @@ const Borrowed_Tools = () => {
                     </table>
                 </div>
             </div>
+            <TransactionForm />
         </div>
     )
 }
