@@ -1,12 +1,12 @@
 import React, { useState, useEffect,  } from 'react'
-import { toolById } from '../../Services/aviationServices'
+import { toolById, updateTool, addTool, deleteTool } from '../../Services/aviationServices'
 
 
 const Tool_Form = ({ toolId, onClose }) => {
     const [toolImage, setToolImage] = useState(null);
     const [toolBarcodeId, setToolBarcodeId] = useState('')
     const [toolName, setToolName] = useState('')
-    const [toolStatus, setToolStatus] = useState('')
+    const [toolStatus, setToolStatus] = useState('AVAILABLE')
 
     useEffect(()=> {
         if (toolId) {
@@ -37,8 +37,11 @@ const Tool_Form = ({ toolId, onClose }) => {
             status: toolStatus
         }
 
+        console.log(toolId)
+        console.log(toolData)
+
         if (toolId) {
-            updateTool(toolData, toolId)
+            updateTool(toolId, toolData)
                 .then(response => {
                     console.log("Tool updated successfully:", response.data);
                     onClose();
@@ -57,6 +60,24 @@ const Tool_Form = ({ toolId, onClose }) => {
                 });
         }
     }
+
+    function handleDeleteTool() {
+        const isConfirmed = window.confirm("Are you sure you want to delete this product?");
+        if (isConfirmed) {
+            deleteTool(toolId)
+                .then(() => {
+                    onClose();
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 404) {
+                        onClose();
+                    } else {
+                        console.error("Error deleting tool:", error);
+                    }
+                });
+        }
+    }
+    
 
     function handleCloseFunction() {
         setToolImage(null);
@@ -122,9 +143,12 @@ const Tool_Form = ({ toolId, onClose }) => {
                                 </div>
                         </form>
                     </div>
-                    <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button className='btn btn-success' onClick={saveTool} data-bs-toggle="modal">Submit</button>
+                    <div className="modal-footer d-flex justify-content-between">
+                        <button className='btn btn-danger' onClick={() => handleDeleteTool()} data-bs-dismiss="modal" >delete</button>
+                        <div>
+                            <button className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button className='btn btn-success ms-2' onClick={saveTool} data-bs-toggle="modal">Submit</button>
+                        </div>
                     </div>
                 </div>
             </div>
