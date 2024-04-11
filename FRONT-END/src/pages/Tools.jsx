@@ -6,7 +6,8 @@ import Tool_Form from '../components/forms/ToolForm'
 const Tools = () => {
     const [tools, setTools] = useState([])
     const [selectedToolId, setSelectedToolId] = useState(null)
-    const [refresh, setRefresh]= useState(false);
+    const [refresh, setRefresh] = useState(false);
+    const [error, setError] = useState(null)
 
     useEffect(() => {
         getAllTools()
@@ -16,6 +17,7 @@ const Tools = () => {
         try {
             const response = await allTools()
             setTools(response.data)
+            setError(null)
             console.log(response.data)
         } catch (error) {
             console.error(error)
@@ -32,19 +34,27 @@ const Tools = () => {
         setSelectedToolId(toolId)
     }
 
-    function handleRefresh() {
-        setRefresh(prevRefresh => !prevRefresh);
+    function handleClose(error) {
+        console.log(error)
+        if (error) {
+            console.error("Error occurred:", error);
+            setError(error);
+        } else {
+            setRefresh(prevRefresh => !prevRefresh);
+        }
     }
 
     return (
         <div>
             <Header title="Tools" />
             <div className="content">
-                <Tool_Form toolId={selectedToolId} onClose={() => handleRefresh()}/>
+                <Tool_Form toolId={selectedToolId} onClose={(error) => handleClose(error)} />
 
                 <div className='d-flex justify-content-end mx-3 mb-3'>
                     <button className='btn btn-primary' onClick={() => handleAddTool()} data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add Tool</button>
                 </div>
+
+                {error && <div className="alert alert-danger" role="alert">{error}</div>}
 
                 <div className='mx-3'>
                     <div className="row">
