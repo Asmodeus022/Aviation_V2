@@ -88,7 +88,7 @@ public class ToolServiceImpl implements ToolService {
         }
 
         toolDto.setPicture(fileName);
-        ToolEntity tool = ToolMapper.mapToToolEntity(toolDto);
+        ToolEntity tool = ToolMapper.mapToToolEntityWithId(toolDto, toolId);
 
 
         ToolEntity saveTool = toolRepository.save(tool);

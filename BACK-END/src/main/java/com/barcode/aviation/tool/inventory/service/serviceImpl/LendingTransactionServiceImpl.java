@@ -78,7 +78,7 @@ public class LendingTransactionServiceImpl implements LendingTransactionService 
                     .collect(Collectors.toList());
 
             existingTransaction.setBorrowedTools(borrowedTools);
-            existingTransaction.setStatus(lendingOptional.get().getStatus());
+            existingTransaction.setStatus(lendingTransactionDto.getStatus());
 
             LendingTransaction updatedTransaction = lendingTransactionRepository.save(existingTransaction);
             return lendingTransactionMapper.mapToLendingTransactionDto(updatedTransaction);
