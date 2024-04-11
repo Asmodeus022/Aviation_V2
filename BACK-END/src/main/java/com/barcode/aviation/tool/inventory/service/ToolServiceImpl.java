@@ -1,11 +1,20 @@
 package com.barcode.aviation.tool.inventory.service;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
+
+import com.google.zxing.WriterException;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,13 +31,15 @@ import com.barcode.aviation.tool.inventory.mapper.ToolMapper;
 @Service
 public class ToolServiceImpl implements ToolService {
     private final ToolRepository toolRepository;
-
     private final PictureService pictureService;
+    private final BarcodeService barcodeService;
 
-    public ToolServiceImpl(PictureService pictureService, ToolRepository toolRepository) {
+    public ToolServiceImpl(PictureService pictureService, ToolRepository toolRepository, BarcodeService barcodeService){
         this.pictureService = pictureService;
         this.toolRepository =toolRepository;
+        this.barcodeService = barcodeService;
     }
+
 
     @Value("${project.toolpictures}")
     private String path;
@@ -114,4 +125,58 @@ public class ToolServiceImpl implements ToolService {
         ToolDto toolDto = ToolMapper.mapToToolDto(tool, pictureUrl);
         return toolDto;
     }
-}
+
+    public byte[] generateBarcodeForTool(String barcodeId, int width, int height) throws WriterException {
+        try {
+            return barcodeService.generateBarcode(barcodeId, width, height);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String decodeBarcodeFromImage(byte[] barcodeImageBytes) {
+        return barcodeService.decodeBarcode(barcodeImageBytes);
+    }
+
+    public byte[] generateBarcodeForToolAndSaveAsImage(String barcodeId, int width, int height, int margin) {
+        try {
+            // Generate barcode byte array
+            byte[] barcodeBytes = barcodeService.generateBarcode(barcodeId, width, height);
+            if (barcodeBytes == null) {
+                return null;
+            }
+    
+            // Convert byte array to BufferedImage
+            try (ByteArrayInputStream bis = new ByteArrayInputStream(barcodeBytes)) {
+                BufferedImage barcodeImage = ImageIO.read(bis);
+    
+                // Create a new BufferedImage with margin
+                int newWidth = barcodeImage.getWidth() + 2 * margin;
+                int newHeight = barcodeImage.getHeight() + 2 * margin;
+                BufferedImage imageWithMargin = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+    
+                // Fill the new image with white background
+                Graphics2D g2d = imageWithMargin.createGraphics();
+                g2d.setColor(Color.WHITE);
+                g2d.fillRect(0, 0, newWidth, newHeight);
+                g2d.dispose();
+    
+                // Draw the original barcode image onto the new image with margin
+                int x = margin;
+                int y = margin;
+                g2d = imageWithMargin.createGraphics();
+                g2d.drawImage(barcodeImage, x, y, null);
+                g2d.dispose();
+    
+                // Convert the BufferedImage with margin back to byte array
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                ImageIO.write(imageWithMargin, "png", bos);
+                return bos.toByteArray();
+            }
+        } catch (IOException | WriterException e) {
+            e.printStackTrace(); // Log the exception
+            return null;
+        }
+    }
+    }
