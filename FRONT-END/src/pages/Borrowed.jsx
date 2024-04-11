@@ -3,12 +3,14 @@ import Header from '../components/Header'
 import { allBarrowed } from '../Services/aviationServices'
 import TransactionForm from '../components/forms/TransactionForm'
 import ResponseDialog from '../components/modals/ResponseDialog'
+import ReturnForm from '../components/forms/ReturnForm'
 
 
 const Borrowed_Tools = () => {
     const [tools, setTools] = useState([])
     const [selectedToolId, setSelectedToolId] = useState(null)
     const [refresh, setRefresh]= useState(false);
+    const [selectedTransaction, setSelectedTransaction] = useState(null);
 
     useEffect(() => {
         getAllTools()
@@ -48,6 +50,15 @@ const Borrowed_Tools = () => {
         }
     }
 
+    const handleClickReturn = (tool) => {
+        console.log(tool);
+        setSelectedTransaction(tool);
+    }
+
+    const handleOnClose = () => {
+        setRefresh(prevRefresh => !prevRefresh);
+    }
+
 
     return (
         <div>
@@ -84,6 +95,14 @@ const Borrowed_Tools = () => {
                                     </td>
                                     <td>{tool.status}</td>
                                     <td>{tool.borrowedDate}</td>
+                                    <td>
+                                        <button 
+                                        className='btn btn-primary' 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#returnFormModal"
+                                        onClick={() => handleClickReturn(tool)}
+                                        >Return</button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -91,6 +110,10 @@ const Borrowed_Tools = () => {
                 </div>
             </div>
             <TransactionForm />
+            {
+                selectedTransaction !== null &&
+                <ReturnForm returnData={selectedTransaction} onClose={() => handleOnClose()} />
+            }
         </div>
     )
 }
